@@ -114,23 +114,24 @@ void Scene::resetFrameBuffer(const int width, const int height) {
 	_uniqueId = 0;
 
 	// TODO: Set the pixelSize value to be responsive to the screen properties: width and height
-	const int pixelSize = 45;
+	int pixelSize = std::min(height, width) / 16;
+
 
 	// TODO: Place the FrameBuffer in the middle of the screen with the max possible size
 	SDL_Rect frameBufferRect{
-		.x = 400,
-		.y = 50,
-		.w = 600,
-		.h = 600,
+		.x = (width - pixelSize * 16) / 2,
+		.y = (height - pixelSize * 16) / 2,
+		.w = pixelSize * 16,
+		.h = pixelSize * 16,
 	};
 
 	for (int i = 0; i < _frameBuffer.size(); ++i) {
 		const SDL_Point pixelCoords{ i % 16 , i / 16 };
 
-		// TODO: Find each pixelPosition from pixel coordinates and framebuffer properties
+		// TODO: Find each pixelPosition from pixel coordinates and framebuffer properties DONE
 		const SDL_Point pixelPosition{
-			.x = pixelCoords.x * 30,
-			.y = pixelCoords.y * 30,
+			.x = frameBufferRect.x + pixelCoords.x * pixelSize,
+			.y = frameBufferRect.y + pixelCoords.y * pixelSize,
 		};
 
 		const SDL_Rect pixelRect = {
@@ -148,6 +149,7 @@ void Scene::resetFrameBuffer(const int width, const int height) {
 	frameBufferEntity.setFilled(false);
 	addEntity(std::move(frameBufferEntity));
 }
+
 
 void Scene::initializeFrameBuffer() {
 	ImColor Void = { 255,255,255,0 };
