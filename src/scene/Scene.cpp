@@ -127,27 +127,32 @@ void Scene::resetFrameBuffer(const int width, const int height) {
 	Log::Debug(std::format("pitch: {}", pitch));
 
 	//Input
-	float initial = 0.f;
-	float final = 1.f;
-	int num_division_x = 5;
+	float initial = 1.f;
+	float final = 0.f;
+	int num_division_x = 10;
 
 	// vars
 	float diferencial = (final - initial) / num_division_x;
 
-	// TODO: Set the proper frame buffer size
+	
 	const int frameBufferSize = width * height;
 	for (int i = 0; i < frameBufferSize; ++i) {
-		// TODO: Find the pixel coordinates for each index
+		
 		const SDL_Point pixelCoords{
 			.x = i % width,
 			.y = i / height,
 		};
 
+		//Calcula en qué división horizontal del gradiente se encuentra el píxel actual.
 		int division_x = num_division_x * pixelCoords.x / width;
-
-		// TODO: Make a red gradient in the 'x' axis and a green gradient in the 'y' axis
+		
+		//Calcula el porcentaje de intensidad del color rojo para este píxel.
+		float colorPercentage = initial + diferencial * division_x;
+		//Convierte el porcentaje de intensidad (0.0 a 1.0) a un valor de color RGB (0 a 255).
+		int red = (int)(255.f * colorPercentage);
+		
 		ImColor color{
-			255 * division_x / num_division_x,
+			red,
 			0,
 			0,
 			255,
